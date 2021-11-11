@@ -1,6 +1,7 @@
 package main
 
 import (
+        "classes/config"
         "classes/controllers"
         "context"
         "fmt"
@@ -8,7 +9,6 @@ import (
         "github.com/jackc/pgx/v4/pgxpool"
         "github.com/labstack/echo/v4"
         "os"
-        "classes/config"
 )
 
 func main() {
@@ -28,8 +28,10 @@ func main() {
 
         // TABLE CLASS
         students := e.Group("/students")
-        students.GET("/getAll", controller.GetAllStudents)
+        students.GET("/get-all", controller.GetAllStudents)
         students.POST("/create", controller.CreateStudent)
+        students.POST("/update/:id", controller.UpdateStudent)
+        students.POST("/delete/:id", controller.DeleteStudent)
 
         e.Logger.Fatal(e.Start(":1323"))
 }
