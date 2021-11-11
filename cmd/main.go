@@ -8,14 +8,14 @@ import (
         "github.com/jackc/pgx/v4/pgxpool"
         "github.com/labstack/echo/v4"
         "os"
+        "classes/config"
 )
 
 func main() {
         e := echo.New()
 
         // DATABASE QUERIES
-        databaseUrl := "postgres://sakekoke:sakekokePostgres@database-2.cdxjj9acqjbz.us-east-2.rds.amazonaws.com:5432/sakekoke"
-        dbPool, err := pgxpool.Connect(context.Background(), databaseUrl)
+        dbPool, err := pgxpool.Connect(context.Background(), config.DatabaseUrl)
         if err != nil {
                 fmt.Fprintf(os.Stderr, "unable to connect to database: %v\n", err)
                 os.Exit(1)
@@ -28,7 +28,7 @@ func main() {
 
         // TABLE CLASS
         students := e.Group("/students")
-        students.GET("/get", controller.GetStudents)
+        students.GET("/getAll", controller.GetAllStudents)
         students.POST("/create", controller.CreateStudent)
 
         e.Logger.Fatal(e.Start(":1323"))

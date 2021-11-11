@@ -27,7 +27,7 @@ func (controller *Controller) CreateStudent(c echo.Context) error {
 	return c.String(http.StatusOK, "student created!")
 }
 
-func (controller *Controller) GetStudents(c echo.Context) error {
+func (controller *Controller) GetAllStudents(c echo.Context) error {
 	query := `SELECT * FROM students;`
 	rows, err := controller.DB.Query(context.Background(), query)
 	if err != nil {
