@@ -28,6 +28,7 @@ func main() {
 
         // TABLE CLASS
         students := e.Group("/students")
+        students.GET("/get", controller.GetStudents)
         students.POST("/create", controller.CreateStudent)
 
         e.Logger.Fatal(e.Start(":1323"))

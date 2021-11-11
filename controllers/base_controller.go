@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"classes/database/models"
 	"context"
 	"fmt"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 	"os"
 )
@@ -32,6 +34,29 @@ func (controller *Controller) CreateStudent(c echo.Context) error {
 	return c.String(http.StatusOK, "student created!")
 }
 
+func (controller *Controller) GetStudents(c echo.Context) error {
+	query := `SELECT * FROM students;`
+	rows, err := controller.DB.Query(context.Background(), query)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+		os.Exit(1)
+	}
 
+	var students []models.Student
 
+	for rows.Next() {
+		values, err := rows.Values()
+		if err != nil {
+			log.Fatal(err)
+		}
+		students = append(students, models.Student{
+			ID:        values[1].(int32),
+			FirstName: values[1].(string),
+			LastName:  values[2].(string),
+			Gender:    values[3].(int32),
+			Status:    values[4].(bool),
+		})
+	}
 
+	return c.JSON(http.StatusOK, students)
+}
